@@ -111,8 +111,13 @@ Function Get-HttpSecHead
         [Parameter(Position = 2,Mandatory = $false,
         HelpMessage = 'Some sites may require credentials to access the site, usually dev sites hidden behind a Basic Auth logon page')]
         [ValidateSet('y','Y','yes','Yes','YES')]
-        [string]$cred
-        )
+        [string]$cred,
+
+        [Parameter(Position = 3,Mandatory = $false,
+        HelpMessage = 'Follow Redirects')]
+        [ValidateSet('y','Y','yes','Yes','YES')]
+        [string]$redirect
+    )
 
     Add-Type "
     using System.Net;
@@ -222,6 +227,17 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
         $securepass = Read-Host 'Enter Password: ' -AsSecureString
         $credentials = New-Object System.Management.automation.PSCredential ($user, $securepass)
     }
+    
+    #follow redirects
+    if($redirect)
+    {
+    $MaximumRedirection = 3
+    }
+    else
+    {
+    $MaximumRedirection = 0
+    }
+
 
     #User agent string is required to support Content-Security-Policy retrieval, natively Invoke-WebRequest does not send a user agent string that supports CSP
     $UserAgent = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36'
@@ -229,13 +245,14 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
     #Webrequest with creds or not
     if($cred)
     {
-    $webrequest = Invoke-WebRequest -Uri $url -MaximumRedirection 0 -ErrorAction Ignore -SessionVariable sessionvar -UserAgent $UserAgent -Credential $credentials -UseBasicParsing
+    $webrequest = Invoke-WebRequest -Uri $url -MaximumRedirection $MaximumRedirection -ErrorAction Ignore -SessionVariable sessionvar -UserAgent $UserAgent -Credential $credentials -UseBasicParsing
     }
     else
     {
-    $webrequest = Invoke-WebRequest -Uri $url -MaximumRedirection 0 -ErrorAction Ignore -SessionVariable sessionvar -UserAgent $UserAgent -UseBasicParsing
+    $webrequest = Invoke-WebRequest -Uri $url -MaximumRedirection $MaximumRedirection -ErrorAction Ignore -SessionVariable sessionvar -UserAgent $UserAgent -UseBasicParsing
     }
-     
+
+
     $cookies = $sessionvar.Cookies.GetCookies($url) 
     Write-Host -Object "`n"
     Write-Host 'Header Information for' $url
