@@ -159,7 +159,9 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
         'X-Frame-Options', 
         'X-Content-Type-Options', 
         'Public-Key-Pins', 
-        'Public-Key-Pins-Report-Only'
+        'Public-Key-Pins-Report-Only',
+        'Referrer-Polcy',
+        'Feature-Policy'
     )
 
     $serverheader = @(
