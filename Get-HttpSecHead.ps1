@@ -116,7 +116,12 @@ Function Get-HttpSecHead
         [Parameter(Position = 3,Mandatory = $false,
         HelpMessage = 'Follow Redirects')]
         [ValidateSet('y','Y','yes','Yes','YES')]
-        [string]$redirect
+        [string]$redirect,
+
+        [Parameter(Position = 3,Mandatory = $false,
+        HelpMessage = 'Follow Redirects')]
+        [ValidateSet('y','Y','yes','Yes','YES')]
+        [string]$csv
     )
 
     Add-Type "
@@ -160,7 +165,7 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
         'X-Content-Type-Options', 
         'Public-Key-Pins', 
         'Public-Key-Pins-Report-Only',
-        'Referrer-Polcy',
+        'Referrer-Policy',
         'Feature-Policy'
     )
 
@@ -266,6 +271,7 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
     Write-Host 'Header Information for' $url
     Write-Host -Object ($webrequest.Headers|Out-String)
     Write-Host -ForegroundColor White -Object "HTTP security Headers`nConsider adding the values in RED to improve the security of the webserver. `n"
+    
     #Determine Security Headers
     foreach ($sechead in $secheaders)
     {
@@ -330,6 +336,24 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
         if($webrequest.Headers.Keys -match $otherx)
         {
             Write-Host -ForegroundColor Red $otherx $webrequest.Headers.$otherx
+        }
+    }
+
+    #Build CSV
+    Write-Host -Object "`nCSV for converting to a table in Word, or importing into Excel`n"
+    if ($csv){
+        Write-Host -Object "Host,X-XSS-protection,Strict-Transport-Security,Content-Security-Policy,Content-Security-Policy-Report-Only,X-Frame-Options,X-Content-Type-Options,Public-Key-Pins,Public-Key-Pins-Report-Only,Referrer-Policy,Feature-Policy"
+        Write-Host -Object "$url," -NoNewline
+        foreach ($sechead in $secheaders)
+        {
+            if($webrequest.Headers.ContainsKey($sechead))
+            {
+                Write-Host "Yes," -NoNewline
+            } 
+            else
+            {
+                Write-Host "No," -NoNewline
+            }
         }
     }
 
