@@ -169,6 +169,7 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
         'Apache-Coyote*', 
         'Apache Tomcat*', 
         'ARR*', 
+        'awselb*',
         'BOA*', 
         'cloudflare-nginx', 
         'gse', 
@@ -177,12 +178,14 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
         'JBoss*', 
         'JBPAPP*', 
         'JBossWeb*', 
+        'Jetty*',
         'Joomla*', 
         'JSF*', 
         'JSP*'
         'Liferay Portal Enterprise Edition*', 
         'lighttpd*', 
-        'LiteSpeed*', 
+        'LiteSpeed*',
+        'Linux*',
         'Microsoft*', 
         'nginx*', 
         'nweb*', 
@@ -209,7 +212,10 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
     $otherxpow = @(
         'X-AspNet-Version', 
         'X-AspNetMVC-Version', 
-        'X-OWA-Version'
+        'X-OWA-Version',
+        'X-Cocoon-Version',
+        'X-Tealeaf',
+        'X-TeaLeaf-UIEventCapture-Version'
     )
     
     #Main Script
