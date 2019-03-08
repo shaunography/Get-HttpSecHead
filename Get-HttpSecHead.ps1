@@ -340,8 +340,8 @@ $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
     }
 
     #Build CSV
-    Write-Host -Object "`nCSV for converting to a table in Word, or importing into Excel`n"
     if ($csv){
+        Write-Host -Object "`nCSV for converting to a table in Word, or importing into Excel`n"
         Write-Host -Object "Host,X-XSS-protection,Strict-Transport-Security,Content-Security-Policy,Content-Security-Policy-Report-Only,X-Frame-Options,X-Content-Type-Options,Public-Key-Pins,Public-Key-Pins-Report-Only,Referrer-Policy,Feature-Policy"
         Write-Host -Object "$url," -NoNewline
         foreach ($sechead in $secheaders)
